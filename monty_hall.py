@@ -1,24 +1,5 @@
-import math
 import random
 
-
-'''
-Door One
-Door Two
-Door Three
-
-Randomly put goat in 1, 2, or 3
-Randomly choose a door
-Randomly remove an eligible door
-Always stay with initial door
-Find if win
-
-Randomly put goat in 1, 2, or 3
-Randomly choose a door
-Always switch door
-Find if win
-
-'''
 
 def random_winner_door():
 
@@ -28,6 +9,21 @@ def random_winner_door():
 def random_initial_door():
 
     return random.randint(1, 3)
+
+
+def determine_winner_no_door_change(winner_door, initial_door):
+
+    if initial_door == winner_door:
+        return True
+    else:
+        return False
+
+
+def play_no_switch():
+    winner_door = random_winner_door()
+    initial_door = random_initial_door()
+    end_result_no_switch = determine_winner_no_door_change(winner_door, initial_door)
+    return end_result_no_switch
 
 
 def randomly_remove_eligible_door(winner_door, initial_door):
@@ -41,14 +37,6 @@ def randomly_remove_eligible_door(winner_door, initial_door):
     randomly_removed_door = random.choice(removable_door)
 
     return randomly_removed_door
-
-
-def determine_winner_no_door_change(winner_door, initial_door):
-
-    if initial_door == winner_door:
-        return True
-    else:
-        return False
 
 
 def always_switch_doors(initial_door, randomly_removed_door):
@@ -68,15 +56,51 @@ def determine_winner_door_change(winner_door, switched_door):
     else:
         return False
 
-def play_no_switch():
-    winner_door = random_winner_door()
-    intial_door = random_initial_door()
-    determine_winner_no_door_change(winner_door, initial_door)
-
 
 def play_switch():
     winner_door = random_winner_door()
-    intial_door = random_initial_door()
+    initial_door = random_initial_door()
     randomly_removed_door = randomly_remove_eligible_door(winner_door, initial_door)
     switched_door = always_switch_doors(initial_door, randomly_removed_door)
-    determine_winner_no_door_change(winner_door, switched_door)
+    end_result_switch = determine_winner_door_change(winner_door, switched_door)
+    return end_result_switch
+
+
+
+def simulate_no_switch(simulations):
+    no_switch_wins = 0
+    counter = 0
+
+    while counter < simulations:
+        counter += 1
+        if play_no_switch() == True:
+            no_switch_wins += 1
+
+    return no_switch_wins
+
+
+def simulate_switch(simulations):
+    switch_wins = 0
+    counter = 0
+
+    while counter < simulations:
+        counter += 1
+        if play_switch() == True:
+            switch_wins += 1
+
+    return switch_wins
+
+    
+
+def main():
+
+    simulations = int(input("How many simulations would you like to run? "))
+    no_switch_wins = simulate_no_switch(simulations)
+    switch_wins = simulate_switch(simulations)
+
+    print("No switch win percentage: {}%".format(round((no_switch_wins/1000.0) * 100), 2))
+    print("Switch win percentage: {}%".format(round((switch_wins/1000.0) * 100), 2))
+
+
+if __name__ == '__main__':
+    main()
